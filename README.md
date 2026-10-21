@@ -117,6 +117,8 @@ Additional improvements I would prioritize are:
 
 - Reporting and visibility: integrate a reporting layer such as Allure to collect flow results, screenshots, and test history in a more usable format for CI and debugging.
 - Data setup and cleanup: add Playwright-based setup scripts for generating known test data and cleanup routines for backend-backed scenarios, so the mobile flows can start from a deterministic state.
+- Excel-driven data management: store reusable scenario inputs in Excel files and add a small parser or loader to read rows of test data into the flows or helper scripts, making it easier to expand coverage without rewriting YAML each time.
+- Credential handling and hashing: add a secure credential strategy for user data, such as hashing or salted hashes for password comparisons in backend-backed test data, and keep only non-sensitive test fixtures in the repo while storing secrets in environment variables or a secure vault.
 - Backend-aware test flows: when the app has backend behavior, add setup hooks to create users, reset data, and tear down fixtures before/after the Maestro runs.
 - Cross-platform validation: extend the suite to run on more emulator configurations and confirm the selectors remain stable across Android OS versions.
 
