@@ -70,9 +70,28 @@ The tests use [Maestro](https://maestro.dev/) because it is designed for native 
 ## Project structure
 
 - `Flows/` — independent YAML scenarios for login, sign-up, forms, and an Android Settings smoke check. App flows clear app state before each scenario.
-- `package.json` — npm scripts for the full suite and an individual flow; no npm dependencies are required.
+- `package.json` — npm scripts for the full suite and an individual flow, plus the local MCP server definition for Maestro integration.
+- `scripts/maestro.js` — resolves the installed Maestro CLI from the standard Windows install path and forwards commands like `test` and `mcp` without requiring the shell PATH to be preconfigured.
 - `.vscode/tasks.json` — a VS Code task that invokes the npm flow script for the suite or a selected flow.
 - `README.md` — the single project guide, including setup, usage, and test scope.
+
+### MCP integration
+
+The project includes a local MCP server entry in `package.json` so an MCP-aware client can launch Maestro through the repository itself. This is useful for agent-driven automation, where the client can start `maestro mcp` and expose the device/automation commands via MCP without manual PATH setup.
+
+```json
+"mcpServers": {
+  "maestro": {
+    "command": "node",
+    "args": [
+      "./scripts/maestro.js",
+      "mcp",
+      "--working-dir",
+      "."
+    ]
+  }
+}
+```
 
 ## Scenarios and expectations
 
@@ -93,6 +112,13 @@ Negative form flows currently verify rejection by checking that the success aler
 ## Next steps
 
 With more time, I would capture and assert the app's exact validation feedback for every rejected submission, prefer stable accessibility/resource identifiers wherever the app exposes them, and run the suite in CI against a documented emulator image. I would also add an iOS simulator run after checking which flows and selectors are portable across platforms.
+
+Additional improvements I would prioritize are:
+
+- Reporting and visibility: integrate a reporting layer such as Allure to collect flow results, screenshots, and test history in a more usable format for CI and debugging.
+- Data setup and cleanup: add Playwright-based setup scripts for generating known test data and cleanup routines for backend-backed scenarios, so the mobile flows can start from a deterministic state.
+- Backend-aware test flows: when the app has backend behavior, add setup hooks to create users, reset data, and tear down fixtures before/after the Maestro runs.
+- Cross-platform validation: extend the suite to run on more emulator configurations and confirm the selectors remain stable across Android OS versions.
 
 ## AI assistance
 

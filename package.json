@@ -10,6 +10,17 @@
     "mcp": "node ./scripts/maestro.js mcp --working-dir .",
     "mcp:no-viewer": "node ./scripts/maestro.js mcp --no-viewer --working-dir ."
   },
+  "mcpServers": {
+    "maestro": {
+      "command": "node",
+      "args": [
+        "./scripts/maestro.js",
+        "mcp",
+        "--working-dir",
+        "."
+      ]
+    }
+  },
   "bin": {
     "maestro": "./scripts/maestro.js"
   }
