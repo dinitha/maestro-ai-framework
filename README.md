@@ -24,32 +24,25 @@ This repository contains end-to-end UI flows for the WebdriverIO Native Demo App
 
 ## Run the tests
 
-Run the complete suite from the repository root using the included PowerShell runner:
+Run the complete suite from the repository root with Maestro's standard CLI command:
 
-```powershell
-.\scripts\run-maestro.ps1
-```
-
-Or invoke Maestro directly:
-
-```powershell
+```sh
 maestro test Flows
 ```
 
-Run one flow by passing its path to either command, for example:
+Run one flow by passing its path:
 
-```powershell
-.\scripts\run-maestro.ps1 Flows\login-success.yaml
-maestro test Flows\login-success.yaml
+```sh
+maestro test Flows/login-success.yaml
 ```
 
-The runner accepts additional Maestro options with `-MaestroArgs`, such as a device serial:
+Pass Maestro CLI options directly when needed, such as selecting a device:
 
-```powershell
-.\scripts\run-maestro.ps1 -MaestroArgs @('--device=DEVICE_ID')
+```sh
+maestro test --device=DEVICE_ID Flows
 ```
 
-On Windows, the same runner is available through VS Code's **Tasks: Run Task** > **Maestro: Run flows** task. It prompts for a flow or directory and defaults to `Flows`.
+In VS Code, use **Tasks: Run Task** > **Maestro: Run flows**. The task invokes `maestro test` directly and prompts for a flow or directory, defaulting to `Flows`.
 
 ## Tool choice
 
@@ -58,8 +51,7 @@ The tests use [Maestro](https://maestro.dev/) because it is designed for native 
 ## Project structure
 
 - `Flows/` — independent YAML scenarios for login, sign-up, forms, and an Android Settings smoke check. App flows clear app state before each scenario.
-- `scripts/run-maestro.ps1` — checks the CLI and flow path, then runs the requested flow or directory.
-- `.vscode/tasks.json` — a VS Code task for running the suite or a selected flow.
+- `.vscode/tasks.json` — a VS Code task that calls the Maestro CLI for the suite or a selected flow.
 - `README.md` — the single project guide, including setup, usage, and test scope.
 
 ## Scenarios and expectations

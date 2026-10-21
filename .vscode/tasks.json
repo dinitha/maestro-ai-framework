@@ -4,14 +4,9 @@
     {
       "label": "Maestro: Run flows",
       "type": "shell",
-      "command": "powershell.exe",
+      "command": "maestro",
       "args": [
-        "-NoProfile",
-        "-ExecutionPolicy",
-        "Bypass",
-        "-File",
-        "${workspaceFolder}/scripts/run-maestro.ps1",
-        "-FlowPath",
+        "test",
         "${input:maestroFlowPath}"
       ],
       "problemMatcher": [],
