@@ -1,0 +1,15 @@
+appId: com.wdiodemoapp
+name: Login rejects invalid email
+---
+- launchApp:
+    clearState: true
+- tapOn:
+    text: Login
+    index: 0
+- tapOn: Email
+- inputText: not-an-email
+- tapOn: Password
+- inputText: TestPass123
+- hideKeyboard
+- tapOn: button-LOGIN
+- assertNotVisible: Success

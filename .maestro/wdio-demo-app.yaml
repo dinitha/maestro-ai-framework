@@ -1,0 +1,5 @@
+appId: com.wdiodemoapp
+name: WDIO Demo App opens
+---
+- launchApp
+- takeScreenshot: wdio-demo-app-home

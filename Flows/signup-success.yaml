@@ -1,0 +1,20 @@
+appId: com.wdiodemoapp
+name: Signup accepts valid details
+---
+- launchApp:
+    clearState: true
+- tapOn:
+    text: Login
+    index: 0
+- tapOn: Sign up
+- tapOn: Email
+- inputText: maestro.signup@example.com
+- tapOn: Password
+- inputText: TestPass123
+- tapOn: Confirm password
+- inputText: TestPass123
+- hideKeyboard
+- tapOn: button-SIGN UP
+- assertVisible: Signed Up!
+- assertVisible: You successfully signed up!
+- tapOn: OK

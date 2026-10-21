@@ -1,0 +1,16 @@
+appId: com.wdiodemoapp
+name: Forms echoes text, toggles switch, and shows alert
+---
+- launchApp:
+    clearState: true
+- tapOn: Forms
+- tapOn: Type something
+- inputText: Maestro forms check
+- hideKeyboard
+- assertVisible: Maestro forms check
+- tapOn: switch
+- assertVisible: Click to turn the switch OFF
+- tapOn: button-Active
+- assertVisible: This button is
+- assertVisible: This button is active
+- tapOn: OK

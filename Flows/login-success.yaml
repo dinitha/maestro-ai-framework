@@ -1,0 +1,17 @@
+appId: com.wdiodemoapp
+name: Login accepts valid credentials
+---
+- launchApp:
+    clearState: true
+- tapOn:
+    text: Login
+    index: 0
+- tapOn: Email
+- inputText: test@example.com
+- tapOn: Password
+- inputText: TestPass123
+- hideKeyboard
+- tapOn: button-LOGIN
+- assertVisible: Success
+- assertVisible: You are logged in!
+- tapOn: OK
