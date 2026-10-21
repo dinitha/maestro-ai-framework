@@ -1,65 +1,87 @@
-# Maestro AI Framework
+# Maestro UI test suite
 
-Run Maestro tests in the repository-root `Flows/` directory from PowerShell or VS Code (or pass a different Flow file or directory to the runner).
+This repository contains end-to-end UI flows for the WebdriverIO Native Demo App (`com.wdiodemoapp`). The suite is written for Maestro and targets Android.
 
-## Prerequisites
+## Set up
 
-- Install [Maestro CLI](https://docs.maestro.dev/maestro-cli/how-to-install-maestro-cli) and make sure `maestro` is on `PATH`.
-- Install Java 17 or newer and set `JAVA_HOME`.
-- Start a target device before running a test: an Android emulator/device, or an iOS simulator on macOS.
-- Each Flow must target an app available on that device. Set its `appId` to the app's Android application ID or iOS bundle ID.
+1. Install Java 17 or newer and set `JAVA_HOME`.
+2. Install the [Maestro CLI](https://docs.maestro.dev/maestro-cli/how-to-install-maestro-cli), then make sure `maestro` is available on your `PATH`.
+3. Install Android Studio, Android SDK Platform Tools, and create or connect an Android emulator/device.
+4. Download the Android APK from the [WebdriverIO Native Demo App releases](https://github.com/webdriverio/native-demo-app/releases) and install it on the target device. For example, in PowerShell:
 
-Check the setup with `maestro --version` and `maestro list-devices`.
+	```powershell
+	adb install .\path\to\native-demo-app.apk
+	```
 
-## Run tests
+	The installed app must have the application ID `com.wdiodemoapp`. The Android Settings smoke flow uses the Settings app already included with Android.
+5. From the repository root, verify the tools and target are available:
 
-Run all Flows in the `Flows/` directory:
+	```powershell
+	java -version
+	maestro --version
+	maestro list-devices
+	```
+
+## Run the tests
+
+Run the complete suite from the repository root using the included PowerShell runner:
 
 ```powershell
 .\scripts\run-maestro.ps1
 ```
 
-Run one Flow or another directory:
+Or invoke Maestro directly:
 
 ```powershell
- .\scripts\run-maestro.ps1 Flows\login-success.yaml
-.\scripts\run-maestro.ps1 .\path\to\flows
+maestro test Flows
 ```
 
-You can also call the CLI directly, for example `maestro test Flows` or `maestro test Flows\login.yaml`.
-
-In VS Code, run **Tasks: Run Task** and choose **Maestro: Run flows**. It prompts for a Flow file or directory and defaults to `Flows`. The task uses the repository's PowerShell runner.
-
-To pass CLI options through the runner, use `-MaestroArgs`, for example:
+Run one flow by passing its path to either command, for example:
 
 ```powershell
-.\scripts\run-maestro.ps1 -FlowPath Flows -MaestroArgs @('--device=DEVICE_ID', '--include-tags=smoke')
+.\scripts\run-maestro.ps1 Flows\login-success.yaml
+maestro test Flows\login-success.yaml
 ```
 
-## Add a Flow
-
-Create a `.yaml` or `.yml` file under `Flows/`. The included [Android Settings sample](Flows/android-settings.yaml) launches the built-in Android Settings app and captures a screenshot. Run it with:
+The runner accepts additional Maestro options with `-MaestroArgs`, such as a device serial:
 
 ```powershell
-.\scripts\run-maestro.ps1 Flows\android-settings.yaml
+.\scripts\run-maestro.ps1 -MaestroArgs @('--device=DEVICE_ID')
 ```
 
-For your own app, set `appId` to its installed Android application ID or iOS bundle ID. A minimal Android Flow looks like:
+On Windows, the same runner is available through VS Code's **Tasks: Run Task** > **Maestro: Run flows** task. It prompts for a flow or directory and defaults to `Flows`.
 
-```yaml
-appId: com.example.app
----
-- launchApp
-```
+## Tool choice
 
-Replace `com.example.app` with the app ID installed on your target device, then run the directory or that file. Maestro Flow syntax and commands are documented in the [Maestro Flows guide](https://docs.maestro.dev/maestro-flows).
+The tests use [Maestro](https://maestro.dev/) because it is designed for native mobile UI automation, runs against a real emulator/device, and expresses scenarios as short, readable YAML flows without requiring changes to the app under test. Maestro's UI commands and assertions wait for matching elements/conditions instead of relying on fixed-duration sleeps. Selectors use visible labels and the app's accessibility descriptions rather than screen coordinates.
 
-## WDIO demo app scenarios
+## Project structure
 
-The `Flows/` directory includes signup success/validation, login success/validation, and Forms interaction scenarios for the installed `com.wdiodemoapp` sample app. Run all of them with:
+- `Flows/` — independent YAML scenarios for login, sign-up, forms, and an Android Settings smoke check. App flows clear app state before each scenario.
+- `scripts/run-maestro.ps1` — checks the CLI and flow path, then runs the requested flow or directory.
+- `.vscode/tasks.json` — a VS Code task for running the suite or a selected flow.
+- `README.md` — the single project guide, including setup, usage, and test scope.
 
-```powershell
-& "$env:LOCALAPPDATA\Programs\Maestro\bin\maestro.bat" test --device=127.0.0.1:5555 --test-output-dir "$env:TEMP\maestro-results" Flows
-```
+## Scenarios and expectations
 
-Maestro's MCP server is available via `maestro mcp`; configure it in the coding agent's MCP settings to author or run tests through MCP tools. The Flows can also be run directly with the CLI as above.
+| Flow | Expected result |
+| --- | --- |
+| `login-success.yaml` | Valid credentials display the success alert and its confirmation text. |
+| `login-invalid-email.yaml` | Invalid email does not produce a success alert; the login form remains visible. |
+| `login-short-password.yaml` | A password shorter than eight characters does not produce a success alert; the login form remains visible. |
+| `signup-success.yaml` | Matching valid details display the sign-up success alert and confirmation text. |
+| `signup-invalid-email.yaml` | Invalid email does not produce the sign-up success alert; the sign-up form remains visible. |
+| `signup-mismatched-passwords.yaml` | Mismatched passwords do not produce the sign-up success alert; the sign-up form remains visible. |
+| `forms-echo-switch-alert.yaml` | Text is echoed, the switch changes state, and the active-button alert appears. |
+| `android-settings.yaml` | Android Settings launches and a screenshot is captured. |
+| `wdio-demo-app.yaml` | The demo app launches and a screenshot is captured. |
+
+Negative form flows currently verify rejection by checking that the success alert is absent and the relevant submit button remains available. They do not assert exact validation-message wording; adding stable, app-specific validation feedback assertions is a follow-up.
+
+## Next steps
+
+With more time, I would capture and assert the app's exact validation feedback for every rejected submission, prefer stable accessibility/resource identifiers wherever the app exposes them, and run the suite in CI against a documented emulator image. I would also add an iOS simulator run after checking which flows and selectors are portable across platforms.
+
+## AI assistance
+
+GitHub Copilot was used to help draft and refine the Maestro flows and this documentation, and to assist with debugging selectors against the running app. The scenarios were exercised with the Maestro CLI on an Android emulator; AI assistance did not replace execution-based validation.

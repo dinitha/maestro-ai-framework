@@ -13,3 +13,4 @@ name: Login rejects invalid email
 - hideKeyboard
 - tapOn: button-LOGIN
 - assertNotVisible: Success
+- assertVisible: button-LOGIN
