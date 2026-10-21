@@ -31,7 +31,19 @@ Run the complete suite from the repository root through the npm script:
 npm test
 ```
 
-The script invokes Maestro's standard `maestro test Flows` command. You can also call it directly:
+The project resolves the installed Maestro binary automatically even when the shell PATH does not include it. The same mechanism also supports the MCP server:
+
+```sh
+npm run mcp
+```
+
+To disable the viewer while starting the server:
+
+```sh
+npm run mcp:no-viewer
+```
+
+You can also call the underlying CLI directly when your shell already has Maestro on PATH:
 
 ```sh
 maestro test Flows

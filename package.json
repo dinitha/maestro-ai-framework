@@ -4,7 +4,13 @@
   "private": true,
   "description": "Maestro UI tests for the WebdriverIO Native Demo App",
   "scripts": {
-    "test": "maestro test Flows",
-    "test:flow": "maestro test"
+    "maestro": "node ./scripts/maestro.js",
+    "test": "node ./scripts/maestro.js test Flows",
+    "test:flow": "node ./scripts/maestro.js test",
+    "mcp": "node ./scripts/maestro.js mcp --working-dir .",
+    "mcp:no-viewer": "node ./scripts/maestro.js mcp --no-viewer --working-dir ."
+  },
+  "bin": {
+    "maestro": "./scripts/maestro.js"
   }
 }
