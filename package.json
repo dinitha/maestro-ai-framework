@@ -1,0 +1,10 @@
+{
+  "name": "maestro-ui-test-suite",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Maestro UI tests for the WebdriverIO Native Demo App",
+  "scripts": {
+    "test": "maestro test Flows",
+    "test:flow": "maestro test"
+  }
+}

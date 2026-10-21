@@ -6,15 +6,16 @@ This repository contains end-to-end UI flows for the WebdriverIO Native Demo App
 
 1. Install Java 17 or newer and set `JAVA_HOME`.
 2. Install the [Maestro CLI](https://docs.maestro.dev/maestro-cli/how-to-install-maestro-cli), then make sure `maestro` is available on your `PATH`.
-3. Install Android Studio, Android SDK Platform Tools, and create or connect an Android emulator/device.
-4. Download the Android APK from the [WebdriverIO Native Demo App releases](https://github.com/webdriverio/native-demo-app/releases) and install it on the target device. For example, in PowerShell:
+3. Install Node.js with npm (Node.js 18 or newer).
+4. Install Android Studio, Android SDK Platform Tools, and create or connect an Android emulator/device.
+5. Download the Android APK from the [WebdriverIO Native Demo App releases](https://github.com/webdriverio/native-demo-app/releases) and install it on the target device. For example, in PowerShell:
 
 	```powershell
 	adb install .\path\to\native-demo-app.apk
 	```
 
 	The installed app must have the application ID `com.wdiodemoapp`. The Android Settings smoke flow uses the Settings app already included with Android.
-5. From the repository root, verify the tools and target are available:
+6. From the repository root, verify the tools and target are available:
 
 	```powershell
 	java -version
@@ -24,16 +25,22 @@ This repository contains end-to-end UI flows for the WebdriverIO Native Demo App
 
 ## Run the tests
 
-Run the complete suite from the repository root with Maestro's standard CLI command:
+Run the complete suite from the repository root through the npm script:
+
+```sh
+npm test
+```
+
+The script invokes Maestro's standard `maestro test Flows` command. You can also call it directly:
 
 ```sh
 maestro test Flows
 ```
 
-Run one flow by passing its path:
+Run one flow through npm by passing its path after `--`:
 
 ```sh
-maestro test Flows/login-success.yaml
+npm run test:flow -- Flows/login-success.yaml
 ```
 
 Pass Maestro CLI options directly when needed, such as selecting a device:
@@ -42,7 +49,7 @@ Pass Maestro CLI options directly when needed, such as selecting a device:
 maestro test --device=DEVICE_ID Flows
 ```
 
-In VS Code, use **Tasks: Run Task** > **Maestro: Run flows**. The task invokes `maestro test` directly and prompts for a flow or directory, defaulting to `Flows`.
+In VS Code, use **Tasks: Run Task** > **Maestro: Run flows**. The task invokes the `test:flow` npm script and prompts for a flow or directory, defaulting to `Flows`.
 
 ## Tool choice
 
@@ -51,7 +58,8 @@ The tests use [Maestro](https://maestro.dev/) because it is designed for native 
 ## Project structure
 
 - `Flows/` — independent YAML scenarios for login, sign-up, forms, and an Android Settings smoke check. App flows clear app state before each scenario.
-- `.vscode/tasks.json` — a VS Code task that calls the Maestro CLI for the suite or a selected flow.
+- `package.json` — npm scripts for the full suite and an individual flow; no npm dependencies are required.
+- `.vscode/tasks.json` — a VS Code task that invokes the npm flow script for the suite or a selected flow.
 - `README.md` — the single project guide, including setup, usage, and test scope.
 
 ## Scenarios and expectations

@@ -4,9 +4,11 @@
     {
       "label": "Maestro: Run flows",
       "type": "shell",
-      "command": "maestro",
+      "command": "npm",
       "args": [
-        "test",
+        "run",
+        "test:flow",
+        "--",
         "${input:maestroFlowPath}"
       ],
       "problemMatcher": [],
